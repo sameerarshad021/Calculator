@@ -99,3 +99,55 @@
     .equals {
       background: #ff9500;
     }
+
+    /* Mobile responsive adjustments (≤ 410px) */
+@media (max-width: 410px) {
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 8px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .calculator {
+    width: 100%;
+    max-width: 400px;
+    padding: 18px;
+    border-radius: 36px;
+  }
+
+  .display-container {
+    height: 120px;
+    border-radius: 26px;
+    margin-bottom: 24px;
+    padding: 16px 24px;
+  }
+
+  .expression {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+  }
+
+  .current {
+    font-size: 3.4rem;
+  }
+
+  .buttons {
+    gap: 12px;
+  }
+
+  button {
+    height: 62px;
+    width: 62px;
+    font-size: 1.75rem;
+  }
+
+  .zero {
+    height: 68px;
+    width: auto;
+    padding-left: 26px;
+    font-size: 1.75rem;
+  }
+}
