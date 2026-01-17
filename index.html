@@ -8,36 +8,37 @@
 </head>
 <body>
 <div class="calculator">
-  <div class="display">
+  <div class="display-container">
     <div class="expression" id="expression"></div>
-    <div class="result" id="display">0</div>
+    <div class="current" id="display">0</div>
   </div>
   
   <div class="buttons">
-    <button class="special" data-action="clear">AC</button>
-    <button class="special" data-action="sign">+/-</button>
-    <button class="special" data-action="percent">%</button>
-    <button class="operator" data-op="/">÷</button>
+    <button class="function" onclick="clearAll()">AC</button>
+    <button class="function" onclick="plusMinus()">+/-</button>
+    <button class="function" onclick="percent()">%</button>
+    <button class="operator" onclick="appendOperator('/')">÷</button>
 
-    <button class="number" data-num>7</button>
-    <button class="number" data-num>8</button>
-    <button class="number" data-num>9</button>
-    <button class="operator" data-op="*">×</button>
+    <button class="number" onclick="appendNumber('7')">7</button>
+    <button class="number" onclick="appendNumber('8')">8</button>
+    <button class="number" onclick="appendNumber('9')">9</button>
+    <button class="operator" onclick="appendOperator('*')">×</button>
 
-    <button class="number" data-num>4</button>
-    <button class="number" data-num>5</button>
-    <button class="number" data-num>6</button>
-    <button class="operator" data-op="-">−</button>
+    <button class="number" onclick="appendNumber('4')">4</button>
+    <button class="number" onclick="appendNumber('5')">5</button>
+    <button class="number" onclick="appendNumber('6')">6</button>
+    <button class="operator" onclick="appendOperator('-')">-</button>
 
-    <button class="number" data-num>1</button>
-    <button class="number" data-num>2</button>
-    <button class="number" data-num>3</button>
-    <button class="operator" data-op="+">+</button>
+    <button class="number" onclick="appendNumber('1')">1</button>
+    <button class="number" onclick="appendNumber('2')">2</button>
+    <button class="number" onclick="appendNumber('3')">3</button>
+    <button class="operator" onclick="appendOperator('+')">+</button>
 
-    <button class="number zero" data-num>0</button>
-    <button class="number" data-num>.</button>
-    <button class="equals operator">=</button>
+    <button class="number zero" onclick="appendNumber('0')">0</button>
+    <button class="number" onclick="appendDot()">.</button>
+    <button class="operator equals" onclick="calculate()">=</button>
   </div>
+</div>
     <script src="app.js"></script>
 </body>
 </html>

@@ -1,106 +1,95 @@
 const display = document.getElementById('display');
-const expressionEl = document.getElementById('expression');
+  const expressionDiv = document.getElementById('expression');
 
-let current = '0';
-let previous = null;
-let operator = null;
-let shouldReset = false;
+  let currentInput = '0';
+  let previousInput = '';
+  let operator = null;
+  let expression = '';
 
-function updateScreen() {
-  display.textContent = current || '0';
-  
-  if (previous !== null && operator) {
-    expressionEl.textContent = `${previous} ${operator}`;
-  } else {
-    expressionEl.textContent = '';
-  }
-}
-
-function appendNumber(num) {
-  if (shouldReset) {
-    current = '';
-    shouldReset = false;
-  }
-  
-  if (current === '0' && num !== '.') {
-    current = num;
-  } else {
-    current += num;
-  }
-  updateScreen();
-}
-
-function setOperator(op) {
-  if (current === '') return;
-
-  if (previous !== null && operator) {
-    calculate(); // chain operations
+  function updateDisplay() {
+    display.textContent = currentInput;
+    expressionDiv.textContent = expression;
   }
 
-  previous = current;
-  operator = op;
-  shouldReset = true;
-  updateScreen();
-}
-
-function calculate() {
-  if (!previous || !operator || !current) return;
-
-  let a = parseFloat(previous);
-  let b = parseFloat(current);
-  let result;
-
-  switch(operator) {
-    case '+': result = a + b; break;
-    case '-': result = a - b; break;
-    case '*': result = a * b; break;
-    case '/': result = b === 0 ? 'Error' : a / b; break;
+  function appendNumber(number) {
+    if (currentInput === '0' || currentInput === 'Error') {
+      currentInput = number;
+    } else {
+      currentInput += number;
+    }
+    updateDisplay();
   }
 
-  current = result.toString().length > 12 
-    ? Number(result).toExponential(8) 
-    : result.toString();
-  
-  previous = null;
-  operator = null;
-  shouldReset = true;
-  updateScreen();
-}
+  function appendDot() {
+    if (currentInput === 'Error') currentInput = '0';
+    if (!currentInput.includes('.')) {
+      currentInput += '.';
+    }
+    updateDisplay();
+  }
 
-function clearAll() {
-  current = '0';
-  previous = null;
-  operator = null;
-  shouldReset = false;
-  updateScreen();
-}
+  function appendOperator(op) {
+    if (currentInput === 'Error') return;
 
-function toggleSign() {
-  if (current === '0' || current === '') return;
-  current = (parseFloat(current) * -1).toString();
-  updateScreen();
-}
+    if (previousInput !== '' && operator && currentInput !== '') {
+      calculate(); // chain calculation
+    }
 
-function percent() {
-  if (current === '0' || current === '') return;
-  current = (parseFloat(current) / 100).toString();
-  updateScreen();
-}
+    previousInput = currentInput;
+    operator = op;
 
-// Event Listeners
-document.querySelectorAll('[data-num]').forEach(btn => {
-  btn.addEventListener('click', () => appendNumber(btn.textContent));
-});
+    // Show expression like 12 + 
+    expression = `${previousInput} ${operator}`;
+    currentInput = '0';
+    updateDisplay();
+  }
 
-document.querySelectorAll('[data-op]').forEach(btn => {
-  btn.addEventListener('click', () => setOperator(btn.getAttribute('data-op')));
-});
+  function calculate() {
+    if (!operator || !previousInput) return;
 
-document.querySelector('.equals').addEventListener('click', calculate);
+    let result;
+    const prev = parseFloat(previousInput);
+    const curr = parseFloat(currentInput);
 
-document.querySelectorAll('[data-action]').forEach(btn => {
-  const action = btn.dataset.action;
-  if (action === 'clear') btn.addEventListener('click', clearAll);
-  if (action === 'sign')  btn.addEventListener('click', toggleSign);
-  if (action === 'percent') btn.addEventListener('click', percent);
-});
+    switch (operator) {
+      case '+': result = prev + curr; break;
+      case '-': result = prev - curr; break;
+      case '*': result = prev * curr; break;
+      case '/':
+        result = curr === 0 ? 'Error' : prev / curr;
+        break;
+      default: return;
+    }
+
+    currentInput = result.toString().length > 12 
+      ? Number(result).toExponential(6) 
+      : result.toString();
+
+    // After =, show full expression
+    expression = `${previousInput} ${operator} ${previousInput !== currentInput ? curr : ''} =`;
+    operator = null;
+    previousInput = '';
+    updateDisplay();
+  }
+
+  function clearAll() {
+    currentInput = '0';
+    previousInput = '';
+    operator = null;
+    expression = '';
+    updateDisplay();
+  }
+
+  function plusMinus() {
+    if (currentInput === '0' || currentInput === 'Error') return;
+    currentInput = (parseFloat(currentInput) * -1).toString();
+    updateDisplay();
+  }
+
+  function percent() {
+    if (currentInput === '0' || currentInput === 'Error') return;
+    currentInput = (parseFloat(currentInput) / 100).toString();
+    updateDisplay();
+  }
+
+  updateDisplay();
